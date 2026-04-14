@@ -1,0 +1,44 @@
+﻿name: Playwright .NET Tests
+
+on:
+  push:
+    branches: [ main, master, dev ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Debug --no-restore
+
+      - name: Install Playwright browsers and dependencies
+        run: pwsh bin/Debug/net10.0/playwright.ps1 install --with-deps
+
+      - name: Run MSTest suite
+        run: dotnet test --configuration Debug --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifacts
+          path: |
+            **/test-results.trx
+            **/TestResults/**
+            **/playwright-report/**
+            **/trace.zip
+            **/*.png

@@ -21,9 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include=".github\workflows\" />
     <Folder Include="Utilities\" />
     <Folder Include="TestData\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".github\workflows\playrwright-dotnet.yml" />
   </ItemGroup>
 
 </Project>
