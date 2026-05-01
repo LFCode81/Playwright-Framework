@@ -1,0 +1,18 @@
+[
+    {
+        "searchTerm": "computer",
+        "shouldHaveResults": true
+    },
+    {
+        "searchTerm": "book",
+        "shouldHaveResults": true
+    },
+    {
+        "searchTerm": "laptop",
+        "shouldHaveResults": true
+    },
+    {
+        "searchTerm": "zzzz_invalid",
+        "shouldHaveResults": false
+    }
+]

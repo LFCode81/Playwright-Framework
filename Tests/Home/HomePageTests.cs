@@ -7,16 +7,15 @@ namespace Playwright_Framework.Tests.Home
     public class HomePageTests : TestBase
     {
         [TestMethod]
+        [TestCategory("Smoke")]
         public async Task HomePage_Should_Load_Successfully()
         {
+            //Arrange & Act
             await Pages.Home.NavigateAsync();
-            await Page.ScreenshotAsync(new()
-            {
-                Path = "home-test-debug.png",
-                FullPage = true
-            });
 
-            await Expect(Pages.Home.SearchBox).ToBeVisibleAsync();
+
+            //Assert
+            await Expect(Pages.Home.WelcomeHeading).ToBeVisibleAsync();
 
         }
     }
