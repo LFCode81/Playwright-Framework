@@ -10,8 +10,18 @@ namespace Playwright_Framework.TestDataProviders
         {
             get
             {
+                var path = Path.Combine(
+                                         AppContext.BaseDirectory,
+                                         "TestData",
+                                         "Cart",
+                                         "CartRegression.json"
+                                         );
+
+
+
+
                 var testCases = TestDataLoader.Load<List<CartTestCase>>(
-                    Path.Combine("TestData", "Cart", "cartRegression.json"));
+                    Path.Combine("TestData", "Cart", "CartRegression.json"));
 
                 return testCases.Select(testCase => new object[] { testCase });
             }
