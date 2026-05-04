@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 using Microsoft.Playwright;
-using Playwright_Framework.Components;
+
 
 namespace Playwright_Framework.Pages
 {
-   public class SearchResultsPage( IPage page ) : BasePage(page)
+    public class SearchResultsPage(IPage page) : BasePage(page)
     {
 
         public ILocator SearchResultsTitle => Page.Locator(".page-title");
@@ -24,9 +22,9 @@ namespace Playwright_Framework.Pages
         public async Task<bool> HasResultsAsync()
         {
 
-            if( await ProductItems.CountAsync()  > 0 ) 
+            if (await ProductItems.CountAsync() > 0)
                 return true;
-            
+
             return false;
         }
 

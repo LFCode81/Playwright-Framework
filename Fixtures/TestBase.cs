@@ -21,12 +21,17 @@ namespace Playwright_Framework.Fixtures
             return home;
         }
 
-        protected async Task<ProductDetailsPage> NavigateToProductDetailsPageAsync(string categoryName,string productName)
+        protected async Task<ProductDetailsPage> NavigateToProductDetailsPageAsync(string categoryName, string productName, string? subCategoryName = null)
         {
             var home = await NavigateToHomeAsync();
             await home.MenuBar.GoToCategoryAsync(categoryName);
 
             var categoryPage = Pages.Category;
+
+            if (!string.IsNullOrWhiteSpace(subCategoryName))
+            {
+                await categoryPage.OpenSubCategoryAsync(subCategoryName);
+            }
 
             return await categoryPage.OpenProductAsync(productName);
         }
@@ -42,7 +47,7 @@ namespace Playwright_Framework.Fixtures
         protected async Task<SearchResultsPage> NavigateToSearchResultsPageAsync(string searchTerm)
         {
             var home = await NavigateToHomeAsync();
-            await home.Search.SearchAsync(searchTerm);
+            await home.Search.ForItemAsync(searchTerm);
 
             return Pages.SearchResults;
         }

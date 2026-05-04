@@ -11,6 +11,8 @@ namespace Playwright_Framework.Pages
 
         public ILocator ProductTitles => Page.Locator(".product-title a");
 
+        public ILocator SubCategoryItems => Page.Locator(".sub-category-grid .item-box");
+
         public ILocator GetProductItem(string productName) =>
             ProductTitles.Filter(new() { HasText = productName }).First;
 
@@ -26,6 +28,16 @@ namespace Playwright_Framework.Pages
             await productDetails.WaitForPageAsync(); // Redo this later.
 
             return productDetails;
+        }
+
+       
+
+        public async Task OpenSubCategoryAsync(string subCategoryName)
+        {
+            await SubCategoryItems
+                .Filter(new() { HasText = subCategoryName })
+                .GetByRole(AriaRole.Link, new() { Name = subCategoryName, Exact = true })
+                .ClickAsync();
         }
     }
 

@@ -1,0 +1,14 @@
+[
+    {
+        "Category": "Books",
+        "SubCategory": null,
+        "ProductName": "Fiction",
+        "ExpectedPrice": "24.00"
+    },
+    {
+        "Category": "Computers",
+        "SubCategory": "Notebooks",
+        "ProductName": "14.1-inch Laptop",
+        "ExpectedPrice": "1590.00"
+    }
+]

@@ -8,12 +8,13 @@ public class WishListTests : TestBase
 {
     [TestMethod]
     [TestCategory("Smoke")]
+    [TestCategory("Wishlist")]
     public async Task User_Can_Open_Wishlist()
     {
         //Arrange & act
         var wishlistPage = await NavigateToWishlistPageAsync();
 
- 
+
         //Assert
         await Expect(wishlistPage.Header).ToBeVisibleAsync();
 

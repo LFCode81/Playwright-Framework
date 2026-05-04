@@ -34,7 +34,7 @@ namespace Playwright_Framework.Pages
             return await ProductPrice.InnerTextAsync();
         }
 
-        public async Task AddToCartAsync()
+        public async Task AddItemToCartAsync()
         {
             var currentQtyText = await ShoppingCartQty.InnerTextAsync();
 

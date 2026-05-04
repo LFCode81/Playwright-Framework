@@ -5,7 +5,7 @@ using Microsoft.Playwright;
 
 namespace Playwright_Framework.Pages
 {
-    public class LoginPage( IPage page ) : BasePage( page )
+    public class LoginPage(IPage page) : BasePage(page)
     {
 
         public ILocator LoginTitle => Page.GetByRole(AriaRole.Heading, new() { Name = "Welcome, Please Sign In!" });
@@ -28,6 +28,23 @@ namespace Playwright_Framework.Pages
         public ILocator PasswordErrorMessage => Page.GetByText("Please enter your password");
 
         public ILocator NewCustomerDescription => Page.GetByText("By creating an account on our website you will be able to shop faster, be up to date on an orders status, and keep track of the orders you have previously made.");
+
+
+        public async Task LoginAsync(string email, string password, bool rememberMe = false)
+        {
+            await EmailInput.FillAsync(email);
+            await PasswordInput.FillAsync(password);
+
+            if (rememberMe)
+            {
+                await RememberMeCheckbox.CheckAsync();
+            }
+            else
+            {
+                await RememberMeCheckbox.UncheckAsync();
+            }
+            await LoginButton.ClickAsync();
+        }
 
 
     }

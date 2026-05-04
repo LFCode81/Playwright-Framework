@@ -1,4 +1,5 @@
 ﻿using Microsoft.Playwright;
+using Playwright_Framework.Pages;
 
 namespace Playwright_Framework.Components
 {
@@ -11,10 +12,12 @@ namespace Playwright_Framework.Components
         public ILocator SearchButton => _page.GetByRole(AriaRole.Button, new() { Name = "Search" });  //Search button
 
 
-        public async Task SearchAsync(string searchTerm)
+        public async Task<SearchResultsPage> ForItemAsync(string searchTerm)
         {
             await SearchBox.FillAsync(searchTerm);
             await SearchButton.ClickAsync();
+
+            return new SearchResultsPage(_page);
         }
 
         public async Task ClearSearchAsync()

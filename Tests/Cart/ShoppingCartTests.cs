@@ -1,4 +1,7 @@
+using Playwright_Framework.Extensions;
 using Playwright_Framework.Fixtures;
+using Playwright_Framework.Models;
+using Playwright_Framework.TestDataProviders;
 using static Microsoft.Playwright.Assertions;
 
 
@@ -10,6 +13,7 @@ public class ShoppingCartTests : TestBase
 {
     [TestMethod]
     [TestCategory("Smoke")]
+    [TestCategory("Cart")]
     [DataRow("Books", "Computing and Internet","10.00")]
     public async Task User_Can_Add_Product_To_Cart(string category, string productName, string expectedPrice)
     {
@@ -17,18 +21,18 @@ public class ShoppingCartTests : TestBase
         var productDetails = await NavigateToProductDetailsPageAsync(category, productName);
 
         await Expect(productDetails.ProductTitle).ToContainTextAsync(productName);
-        await productDetails.AddToCartAsync();
+        await productDetails.AddItemToCartAsync();
 
-        var shoppingCartPage = await productDetails.OpenShoppingCartAsync();
-        var priceFromPage = await shoppingCartPage.GetFirstItemPriceAsync();
+        var CartPage = await productDetails.OpenShoppingCartAsync();
+        var priceFromPage = await CartPage.GetItemInCartAsync(productName);
 
 
         // Assert
         Assert.AreEqual(expectedPrice, priceFromPage);
     }
 
-
     [TestMethod]
+    [TestCategory("Cart")]
     [TestCategory("Smoke")]
     [DataRow("Books", "Computing and Internet", "2")]
     public async Task Cart_Count_Should_Update(string category, string productName, string itemCount)
@@ -39,7 +43,7 @@ public class ShoppingCartTests : TestBase
 
         // Act
         await productDetails.SetQuantityAsync(itemCount);
-        await productDetails.AddToCartAsync();
+        await productDetails.AddItemToCartAsync();
 
         int updatedCartCount = await productDetails.HeaderLinks.GetShoppingCartItemCountAsync();
 
@@ -47,21 +51,62 @@ public class ShoppingCartTests : TestBase
         Assert.AreEqual(initialCartCount + int.Parse(itemCount), updatedCartCount);
     }
 
+    [TestMethod]
+    [DynamicData(nameof(CartTestDataProvider.CartRegressionCases), typeof(CartTestDataProvider))]
+    [TestCategory("Regression")]
+    [TestCategory("Cart")]
+    public async Task User_Can_Add_Product_To_Cart( CartTestCase testCase )
+    {
+        // Arrange & Act
+        var productDetails = await NavigateToProductDetailsPageAsync( testCase.Category, testCase.ProductName, testCase.SubCategory );
+
+        await productDetails.AddItemToCartAsync();
+        var cartPage = await productDetails.OpenShoppingCartAsync();
+        var actualPrice = await cartPage.GetItemInCartAsync(testCase.ProductName);
+
+
+        // Assert
+        Assert.AreEqual(testCase.ExpectedPrice, actualPrice);
+
+    }
 
     [TestMethod]
-    [TestCategory("Smoke")]
-    [DataRow("Books", "Computing and Internet", "5")]
-    public async Task User_Can_Remove_Product_From_Cart(string category, string productName, string itemCount)
+    [TestCategory("Cart")]
+    [TestCategory("Regression")]
+    [DynamicData(nameof(CartTestDataProvider.CartRegressionCases), typeof(CartTestDataProvider))]
+    public async Task User_Can_Update_Product_Quantity_In_Cart( CartTestCase testCase )
     {
         // Arrange
-        var productDetails = await NavigateToProductDetailsPageAsync(category, productName);
+        var productDetails = await NavigateToProductDetailsPageAsync(testCase.Category, testCase.ProductName, testCase.SubCategory);
+       
+        // Act 
+        await productDetails.AddItemToCartAsync();
+        var cartPage = await productDetails.OpenShoppingCartAsync();
 
-        // Act
-        await productDetails.SetQuantityAsync(itemCount);
-        await productDetails.AddToCartAsync();
+        await cartPage.SetQuantityAsync(testCase.ProductName, "5");
+        string actualTotal = await cartPage.GetSubTotalAsync();
 
-        int updatedCartCount = await productDetails.HeaderLinks.GetShoppingCartItemCountAsync();
+        // Assert
+        Assert.AreEqual( testCase.ExpectedPrice.ToDecimal() * 5, actualTotal.ToDecimal() );
 
-        // Need to Remove...
+    }
+
+    [TestMethod]
+    [TestCategory("Cart")]
+    [TestCategory("Regression")]
+    [DynamicData(nameof(CartTestDataProvider.CartRegressionCases), typeof(CartTestDataProvider))]
+    public async Task User_Can_Remove_Product_From_Cart(CartTestCase testCase)
+    {
+        // Arrange
+        var productDetails = await NavigateToProductDetailsPageAsync(testCase.Category, testCase.ProductName, testCase.SubCategory);
+
+        // Act 
+        await productDetails.AddItemToCartAsync();
+        var cart = await productDetails.OpenShoppingCartAsync();
+        await cart.RemoveProductFromCart(testCase.ProductName);
+
+        // Assert
+        await Expect(cart.EmptyCartMessage).ToContainTextAsync("Your Shopping Cart is empty!");
+
     }
 }
