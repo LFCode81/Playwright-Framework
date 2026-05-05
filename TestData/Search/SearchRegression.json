@@ -1,0 +1,31 @@
+[
+    {
+        "SearchTerm": "laptop",
+        "ShouldHaveResults": true,
+        "ExpectedFirstResult": "14.1-inch Laptop",
+        "ExpectedMinResults": 1
+    },
+    {
+        "SearchTerm": "book",
+        "ShouldHaveResults": true,
+        "ExpectedMinResults": 1
+    },
+    {
+        "SearchTerm": "camera",
+        "ShouldHaveResults": true,
+        "ExpectedMinResults": 1
+    },
+    {
+        "SearchTerm": "xyz123invalid",
+        "ShouldHaveResults": false
+    },
+    {
+        "SearchTerm": "",
+        "ShouldHaveResults": false
+    },
+    {
+        "SearchTerm": "Laptop",
+        "ShouldHaveResults": true,
+        "ExpectedFirstResult": "14.1-inch Laptop"
+    }
+]

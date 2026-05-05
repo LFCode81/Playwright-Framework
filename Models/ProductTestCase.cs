@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Playwright_Framework.Models
 {
-    public class ProductData
+    public class ProductTestCase
     {
         public string? Title { get; set; }
         public string? Description { get; set; } 
