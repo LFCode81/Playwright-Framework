@@ -11,6 +11,7 @@ The framework follows modern automation best practices such as **Page Object Mod
 ## ✨ Key Features
 
 - **Page Object Model (POM)** for clean separation of concerns
+- **Factory Pattern** for centralized and scalable page object creation  
 - **Modular architecture** for scalability and maintainability
 - **Data-driven testing** using structured test data providers
 - **Parallel test execution** for faster feedback cycles
